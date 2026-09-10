@@ -2,6 +2,8 @@
 
 [English](README.en.md) · [来源记录](docs/SOURCES.md) · [配色说明](docs/COLORS.md) · [JS 插件安装](docs/PLUGIN.md)
 
+[在线预览与下载](https://jinxiao.github.io/alibaba-cloud-icons/) — 按分类浏览、搜索图标并复制 draw.io 配置。
+
 [下载完整图标包](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud-drawio.zip) · [下载分类 JSON 配置](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud.json) · [所有版本](https://github.com/jinxiao/alibaba-cloud-icons/releases)
 
 按照 Iconfont「阿里云设计中心」发布的图标集分类整理，**保留每个 SVG 的原始颜色和形状**。提供离线预览页、一次加载全部分类的 JSON 配置、JS 插件、分类 XML 和单个 SVG。
@@ -30,7 +32,7 @@
 
 ## 快速使用：一次加载所有分类
 
-取得生成的 `alibaba-cloud-drawio.zip` 后解压并打开 `index.html`。源码仓库不提交生成目录；克隆源码后先按下文构建，再打开 `dist/index.html`。
+直接打开[在线预览页](https://jinxiao.github.io/alibaba-cloud-icons/)，或下载 `alibaba-cloud-drawio.zip` 后解压并打开 `index.html`。源码仓库不提交生成目录；克隆源码后先按下文构建，再打开 `dist/index.html`。
 
 1. 在预览页点击 **复制全部分类配置**；浏览器不允许直接复制时，页面会选中配置供手动复制。
 2. 在 draw.io 选择 **其他 → 配置 → JSON**（Extras → Configuration；简洁界面在 Settings 菜单），粘贴、应用并刷新或重启。
@@ -81,6 +83,22 @@ node --test tests/test_plugin.cjs
 Node.js 18+ 只用于插件测试。构建会生成分发包和 SHA-256 清单，检查每个 XML；测试检查原色与路径保留、分类归属、空标签、SVG 安全边界和插件注册行为。模拟插件 API 测试不代替真实 draw.io 兼容性测试。
 
 请打开 `dist/index.html`，分别查看基础设施蓝色、大数据蓝紫色、安全绿色和 AI 紫色；在 draw.io 应用配置，检查 9 个分类折叠、搜索、拖入后无文字、下方标签编辑，以及保存重新打开。
+
+## GitHub Pages 发布
+
+站点地址：**https://jinxiao.github.io/alibaba-cloud-icons/**。使用 GitHub 默认域名，不配置自定义域名或 `CNAME`。
+
+[发布工作流](.github/workflows/pages.yml)从仓库内的图标快照构建 `dist/`，通过 Python 和插件测试后，将整个目录作为 Pages artifact 发布。无需提交 `dist/`，也无需维护 `gh-pages` 分支；构建不会重新抓取 Iconfont。
+
+- **手动发布**：打开 [Actions → Deploy GitHub Pages](https://github.com/jinxiao/alibaba-cloud-icons/actions/workflows/pages.yml)，点击 **Run workflow**，选择 `main` 后运行。
+- **Release 自动发布**：发布新 Release 时触发（`release: published`，包括预发布），构建对应 Release 标签的代码。草稿保存和普通代码推送不触发部署。
+- **部署记录**：在工作流的 `Deploy dist` 作业或仓库的 `github-pages` 环境查看状态和站点链接。测试失败时不会进入部署。
+
+在线站点包含预览页、分类 JSON、XML、SVG、插件和完整 ZIP 下载；手动部署的版本可能比最新 Release 更新。此工作流不创建 Release，也不上传 Release 附件。
+
+Fork 后，在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**，再手动运行工作流。默认访问地址为 `https://<账号>.github.io/<仓库名>/`；相对资源路径支持仓库子路径。
+
+若 `github-pages` 环境限制可部署的分支或标签，请在 **Settings → Environments → github-pages** 中允许 `main` 分支和 Release 标签（例如标签规则 `*`）。另外，GitHub 会继承个人/组织主页的自定义域名；若要使用默认 `github.io` 域名，个人/组织主页也必须解除该绑定，见 [GitHub 域名继承说明](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)。
 
 ## 更新和贡献
 

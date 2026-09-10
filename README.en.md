@@ -2,6 +2,8 @@
 
 [中文](README.md) · [Sources and colors](docs/COLORS.md) · [Plugin installation](docs/PLUGIN.md)
 
+[Online gallery and downloads](https://jinxiao.github.io/alibaba-cloud-icons/) — browse categories, search icons and copy the draw.io configuration.
+
 [Download the complete package](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud-drawio.zip) · [Download the category configuration](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud.json) · [Releases](https://github.com/jinxiao/alibaba-cloud-icons/releases)
 
 **Original categories and colors** from the Alibaba Cloud Design Center on Iconfont. Includes offline previews, native draw.io configuration, a self-contained JS plugin, XML libraries and SVG files. Icons have empty canvas labels; double-click to enter text below them. Source names remain searchable.
@@ -24,7 +26,7 @@ Every path retains its own source paint, including minor color differences. No n
 
 ## Use
 
-Extract a generated `alibaba-cloud-drawio.zip` and open `index.html`, or build the source and open `dist/index.html`. Click **复制全部分类配置** (Copy all categories), paste into draw.io **Extras → Configuration → JSON**, apply and reload. Enable **阿里云 Iconfont 全部分类** in **More Shapes** if necessary.
+Open the [online gallery](https://jinxiao.github.io/alibaba-cloud-icons/), extract a generated `alibaba-cloud-drawio.zip` and open `index.html`, or build the source and open `dist/index.html`. Click **复制全部分类配置** (Copy all categories), paste into draw.io **Extras → Configuration → JSON**, apply and reload. Enable **阿里云 Iconfont 全部分类** in **More Shapes** if necessary.
 
 For an existing configuration, merge the Alibaba `libraries` section and append `alibaba-cloud-iconfont` to `defaultLibraries`. Remove the previous project's `alibaba-cloud-services` bundle and old XML palettes first. Existing diagrams do not automatically change colors.
 
@@ -37,6 +39,22 @@ The More Shapes entry includes an embedded SVG preview of all 9 categories. If a
 - `dist/drawio/*.xml`: each file creates one palette via File → Open Library from → Device. `all-icons.xml` is flat.
 - `dist/svg/`: SVG files named by upstream icon ID.
 - `dist/catalog.csv`: original names, categories, colors and sources.
+
+## GitHub Pages deployment
+
+The site is hosted at **https://jinxiao.github.io/alibaba-cloud-icons/** using the default GitHub domain, with no custom domain or `CNAME`.
+
+The [Pages workflow](.github/workflows/pages.yml) builds `dist/` from the committed icon snapshot, runs the Python and plugin tests, then deploys the entire directory as a Pages artifact. No committed `dist/`, `gh-pages` branch or Iconfont requests are needed.
+
+- **Manual:** open [Actions → Deploy GitHub Pages](https://github.com/jinxiao/alibaba-cloud-icons/actions/workflows/pages.yml), click **Run workflow**, select `main` and run.
+- **Automatic:** publishing a Release triggers deployment of its tag, including prereleases. Saving drafts and ordinary pushes do not deploy.
+- **Status:** check the workflow's `Deploy dist` job or the repository's `github-pages` environment. Failed tests prevent deployment.
+
+The site includes the gallery, JSON configuration, XML libraries, SVGs, plugin and complete ZIP. A manual deployment may be newer than the latest Release. This workflow does not create Releases or upload Release assets.
+
+For forks, choose **GitHub Actions** under **Settings → Pages → Build and deployment → Source**, then run the workflow manually. The default URL is `https://<account>.github.io/<repository>/`; relative asset links support repository subpaths.
+
+If the `github-pages` environment restricts deployment branches or tags, allow the `main` branch and Release tags (for example, a tag rule of `*`) under **Settings → Environments → github-pages**. GitHub also inherits custom domains from user/organization sites; using the default `github.io` domain requires removing that binding from the user/organization site as well. See [GitHub's domain inheritance documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages).
 
 ## Build and update
 

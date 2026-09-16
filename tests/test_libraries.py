@@ -101,12 +101,14 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(ET.fromstring(exported).get("color"), "#000000")
         self.assertIn('fill="currentColor"', exported)
 
-    def test_built_xml_panel_titles_match_json_for_all_categories(self):
+    def test_built_category_titles_and_supplemental_last_order_match(self):
         categories = build.load(ROOT / "data/catalog.json")["categories"]
         entries = [dict(id=c["id"], asset=c["id"], name=c["name"], categories=[c["id"]],
                         status="named", source_url=c["source_url"], source_icon_id=i)
                    for i, c in enumerate(categories)]
-        catalog = dict(snapshot_date="2026-09-10", categories=categories, entries=entries)
+        # Even if a future source lists UI symbols first, every delivery format puts them last.
+        source_categories = [categories[-1], *categories[:-1]]
+        catalog = dict(snapshot_date="2026-09-10", categories=source_categories, entries=entries)
         assets = {e["id"]: dict(svg=SVG, colors={"#2b85fb": 1}) for e in entries}
         with tempfile.TemporaryDirectory() as temporary, patch.object(build, "load", side_effect=[catalog, assets]):
             out = Path(temporary)
@@ -115,6 +117,12 @@ class LibraryTests(unittest.TestCase):
             config = json.loads((out / "config/alibaba-cloud.json").read_text(encoding="utf-8"))
             palettes = config["libraries"][0]["entries"][0]["libs"]
             self.assertEqual(len(palettes), 9)
+            self.assertEqual([p["title"]["main"] for p in palettes],
+                             [f"阿里云 · {c['name']} / {c['name_en']}" for c in categories])
+            for filename in ("summary.json", "catalog.json"):
+                generated = json.loads((out / filename).read_text(encoding="utf-8"))
+                self.assertEqual([c["id"] for c in generated["categories"]],
+                                 [c["id"] for c in categories])
             for category, palette in zip(categories, palettes):
                 with self.subTest(category=category["id"]):
                     library = ET.parse(out / "drawio" / f"{category['id']}.xml").getroot()

@@ -165,7 +165,11 @@ def verify_library(path):
 def build(out):
     catalog = load(ROOT / "data/catalog.json")
     assets = load(ROOT / "data/assets.json")
-    entries, categories = catalog["entries"], catalog["categories"]
+    entries = catalog["entries"]
+    # Keep product categories in source order; supplemental UI symbols always come last.
+    # The gallery's clibs URL, JSON configuration and plugin share this same order.
+    categories = sorted(catalog["categories"], key=lambda c: c["id"] == "09-supplemental-icons")
+    catalog = {**catalog, "categories": categories}
     if len({e["id"] for e in entries}) != len(entries):
         raise ValueError("Duplicate icon IDs")
     if {e["asset"] for e in entries} != set(assets):

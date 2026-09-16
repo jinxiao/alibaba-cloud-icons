@@ -2,7 +2,7 @@
 
 [English](README.en.md) · [来源记录](docs/SOURCES.md) · [配色说明](docs/COLORS.md) · [JS 插件安装](docs/PLUGIN.md)
 
-[在线预览与下载](https://jinxiao.github.io/alibaba-cloud-icons/) — 按分类浏览、搜索图标并复制 draw.io 配置。
+[在线预览与下载](https://jinxiao.github.io/alibaba-cloud-icons/) — 按分类浏览、搜索图标，一键加载到网页版 draw.io。
 
 [下载完整图标包](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud-drawio.zip) · [下载分类 JSON 配置](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud.json) · [所有版本](https://github.com/jinxiao/alibaba-cloud-icons/releases)
 
@@ -34,6 +34,12 @@
 
 直接打开[在线预览页](https://jinxiao.github.io/alibaba-cloud-icons/)，或下载 `alibaba-cloud-drawio.zip` 后解压并打开 `index.html`。源码仓库不提交生成目录；克隆源码后先按下文构建，再打开 `dist/index.html`。
 
+**网页版一键加载：** 点击 **一键加载全部分类到 draw.io**，在新标签页打开网页版并加载 9 个独立分类面板，无需复制配置。也可以先选择分类，再点击 **加载当前分类到 draw.io**。加载范围不受搜索筛选影响。首次打开若出现存储位置或新建图表提示，按页面提示继续。
+
+一键加载使用 draw.io 官方支持的 [`clibs` URL 参数](https://www.drawio.com/docs/reference/supported-url-parameters/)，需要联网访问公开 XML 图库。本地文件或本地 HTTP 预览使用本项目已发布的在线图库；部署到 HTTPS 网站后使用该网站当前目录下的图库，因此兼容 Fork 的站点路径。本地尚未发布的图标更改请使用配置或 XML 导入。
+
+**离线或桌面版配置：**
+
 1. 在预览页点击 **复制全部分类配置**；浏览器不允许直接复制时，页面会选中配置供手动复制。
 2. 在 draw.io 选择 **其他 → 配置 → JSON**（Extras → Configuration；简洁界面在 Settings 菜单），粘贴、应用并刷新或重启。
 3. 若分类未显示，在“更多图形”勾选 **阿里云 Iconfont 全部分类**。
@@ -43,7 +49,7 @@
 
 也可以直接复制 `dist/config/alibaba-cloud.json`。已有其他自定义配置时，将本项目的 `libraries` 分组合并进去，把 `alibaba-cloud-iconfont` 追加到 `defaultLibraries`，保留其他设置。
 
-**一个普通 XML 只能创建一个面板**，所以 `all-icons.xml` 是平铺总库。一次带入所有可折叠分类应使用 JSON 配置或插件。[draw.io 原生配置格式](https://www.drawio.com/docs/reference/configure-diagram-editor/#libraries)
+**一个普通 XML 只能创建一个面板**，所以 `all-icons.xml` 是平铺总库。一键加载链接会同时打开 9 个分类 XML，形成 9 个独立面板。若希望在“更多图形”中通过一个阿里云分组统一勾选，使用 JSON 配置或插件。[draw.io 原生配置格式](https://www.drawio.com/docs/reference/configure-diagram-editor/#libraries)
 
 ## 从此前版本迁移
 
@@ -59,7 +65,7 @@
 
 | 文件 | 用途 |
 | --- | --- |
-| `dist/index.html` | 离线搜索预览、分类下载和复制配置 |
+| `dist/index.html` | 搜索预览、一键加载网页版、分类下载和复制配置 |
 | `dist/config/alibaba-cloud.json` | 一份配置加载 9 个分类 |
 | `dist/plugins/alibaba-cloud.js` | 自托管 draw.io 插件，详见 [安装说明](docs/PLUGIN.md) |
 | `dist/drawio/01-cloud-infrastructure.xml` 等 | 单个分类；“文件 → 打开图库 → 设备”导入 |

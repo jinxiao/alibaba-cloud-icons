@@ -2,7 +2,7 @@
 
 [中文](README.md) · [Sources and colors](docs/COLORS.md) · [Plugin installation](docs/PLUGIN.md)
 
-[Online gallery and downloads](https://jinxiao.github.io/alibaba-cloud-icons/) — browse categories, search icons and copy the draw.io configuration.
+[Online gallery and downloads](https://jinxiao.github.io/alibaba-cloud-icons/) — browse categories, search icons and load them into the draw.io web editor with one click.
 
 [Download the complete package](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud-drawio.zip) · [Download the category configuration](https://github.com/jinxiao/alibaba-cloud-icons/releases/latest/download/alibaba-cloud.json) · [Releases](https://github.com/jinxiao/alibaba-cloud-icons/releases)
 
@@ -25,6 +25,12 @@ Snapshot 2026-09-10: **9 collections, 888 entries**, including different color v
 Every path retains its own source paint, including minor color differences. No new backgrounds or rounded tiles are added. All 31 upstream unnamed artboards remain available with explicit status labels. Product names containing “backup” are not filtered out.
 
 ## Use
+
+**Web editor:** open the [gallery](https://jinxiao.github.io/alibaba-cloud-icons/) and click **一键加载全部分类到 draw.io** to load all 9 category XML libraries as separate panels in a new tab. Select a category and click **加载当前分类到 draw.io** to load only that category. Search filters do not limit the imported library. Follow any initial storage or new-diagram prompts in draw.io.
+
+This uses the official [`clibs` URL parameter](https://www.drawio.com/docs/reference/supported-url-parameters/) and requires internet access. Local previews use the published project libraries; HTTPS deployments use XML files relative to the gallery, including fork subpaths. To load unpublished local changes, import the XML or use the configuration below.
+
+**Offline or desktop configuration:**
 
 Open the [online gallery](https://jinxiao.github.io/alibaba-cloud-icons/), extract a generated `alibaba-cloud-drawio.zip` and open `index.html`, or build the source and open `dist/index.html`. Click **复制全部分类配置** (Copy all categories), paste into draw.io **Extras → Configuration → JSON**, apply and reload. Enable **阿里云 Iconfont 全部分类** in **More Shapes** if necessary.
 

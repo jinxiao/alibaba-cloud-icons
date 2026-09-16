@@ -87,8 +87,8 @@ def library_entry(entry, svg, ratio=1.0):
     return dict(xml=ET.tostring(model, encoding="unicode"), w=w, h=h, title=title, tags=tags, aspect="fixed")
 
 
-def library_xml(entries):
-    root = ET.Element("mxlibrary", {"tags": "Alibaba Cloud 阿里云 Iconfont"})
+def library_xml(entries, title):
+    root = ET.Element("mxlibrary", {"title": title, "tags": "Alibaba Cloud 阿里云 Iconfont"})
     root.text = json.dumps(entries, ensure_ascii=False, separators=(",", ":"))
     return ET.tostring(root, encoding="unicode") + "\n"
 
@@ -175,17 +175,19 @@ def build(out):
         svg, ratio = normalize_svg(assets[entry["asset"]]["svg"])
         write_text(out / "svg" / f"{entry['id']}.svg", svg + "\n")
         built[entry["id"]] = library_entry(entry, svg, ratio)
-    paths = []
-    groups = [("all-icons", entries)] + [(c["id"], [e for e in entries if c["id"] in e["categories"]]) for c in categories]
-    for name, group in groups:
-        path = out / "drawio" / f"{name}.xml"
-        write_text(path, library_xml([built[e["id"]] for e in group]))
-        paths.append(path)
     config = categorized_configuration(categories, entries, built)
+    palettes = config["libraries"][0]["entries"][0]["libs"]
+    paths = []
+    groups = [("all-icons", "阿里云 · 全部图标 / All Icons", entries)] + [
+        (c["id"], palette["title"]["main"], [e for e in entries if c["id"] in e["categories"]])
+        for c, palette in zip(categories, palettes)]
+    for name, title, group in groups:
+        path = out / "drawio" / f"{name}.xml"
+        write_text(path, library_xml([built[e["id"]] for e in group], title))
+        paths.append(path)
     preview = config["libraries"][0]["entries"][0]["preview"]
     write_text(out / "previews/alibaba-cloud.svg", base64.b64decode(preview.split(",", 1)[1]).decode() + "\n")
     write_text(out / "config/alibaba-cloud.json", json.dumps(config, ensure_ascii=False, indent=2) + "\n")
-    palettes = config["libraries"][0]["entries"][0]["libs"]
     plugin_data = dict(version="iconfont-" + catalog["snapshot_date"], palettes=[
         dict(id="alibaba-cloud-" + c["id"], **p) for c, p in zip(categories, palettes)])
     runtime = (ROOT / "src/plugin.js").read_text(encoding="utf-8")

@@ -1,8 +1,12 @@
 import base64
+import contextlib
 import importlib.util
+import io
 import json
 from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 from urllib.parse import unquote
 import xml.etree.ElementTree as ET
 import zlib
@@ -59,7 +63,10 @@ class LibraryTests(unittest.TestCase):
 
     def test_empty_label_preserves_name_and_svg_through_xml_json(self):
         entry = dict(id="test", name='A & B <中文> "引号"', categories=["compute"], status="named", source_url="https://example.com/?a=1&b=2")
-        item = json.loads(ET.fromstring(build.library_xml([build.library_entry(entry, SVG, 2)])).text)[0]
+        title = '阿里云 · 测试 & "标题" / Test'
+        library = ET.fromstring(build.library_xml([build.library_entry(entry, SVG, 2)], title))
+        self.assertEqual(library.get("title"), title)
+        item = json.loads(library.text)[0]
         obj = ET.fromstring(item["xml"]).find("./root/object")
         self.assertEqual(obj.get("label"), "")
         self.assertEqual(obj.get("iconName"), entry["name"])
@@ -93,6 +100,29 @@ class LibraryTests(unittest.TestCase):
         exported, _ = build.normalize_svg(svg)
         self.assertEqual(ET.fromstring(exported).get("color"), "#000000")
         self.assertIn('fill="currentColor"', exported)
+
+    def test_built_xml_panel_titles_match_json_for_all_categories(self):
+        categories = build.load(ROOT / "data/catalog.json")["categories"]
+        entries = [dict(id=c["id"], asset=c["id"], name=c["name"], categories=[c["id"]],
+                        status="named", source_url=c["source_url"], source_icon_id=i)
+                   for i, c in enumerate(categories)]
+        catalog = dict(snapshot_date="2026-09-10", categories=categories, entries=entries)
+        assets = {e["id"]: dict(svg=SVG, colors={"#2b85fb": 1}) for e in entries}
+        with tempfile.TemporaryDirectory() as temporary, patch.object(build, "load", side_effect=[catalog, assets]):
+            out = Path(temporary)
+            with contextlib.redirect_stdout(io.StringIO()):
+                build.build(out)
+            config = json.loads((out / "config/alibaba-cloud.json").read_text(encoding="utf-8"))
+            palettes = config["libraries"][0]["entries"][0]["libs"]
+            self.assertEqual(len(palettes), 9)
+            for category, palette in zip(categories, palettes):
+                with self.subTest(category=category["id"]):
+                    library = ET.parse(out / "drawio" / f"{category['id']}.xml").getroot()
+                    self.assertTrue(library.get("title"))
+                    self.assertEqual(library.get("title"), palette["title"]["main"])
+                    self.assertEqual(json.loads(library.text)[0]["title"], palette["data"][0]["title"])
+            self.assertEqual(ET.parse(out / "drawio/all-icons.xml").getroot().get("title"),
+                             "阿里云 · 全部图标 / All Icons")
 
     def test_active_svg_content_is_rejected(self):
         for svg in [SVG.replace("<path", '<script>alert(1)</script><path'),

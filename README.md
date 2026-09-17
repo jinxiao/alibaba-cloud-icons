@@ -11,7 +11,7 @@ Alibaba counts include color variants and supplemental UI symbols.
 **Both original sites remain available:**
 
 - https://jinxiao.github.io/alibaba-cloud-icons/ — defaults to Alibaba Cloud.
-- https://jinxiao.github.io/drawio-software-icons/ — defaults to Software & brands.
+- https://jinxiao.github.io/drawio-software-icons/ — defaults to General Software.
 
 This repository keeps the original Alibaba Pages address and resource paths alive.
 Its workflow checks the source repository's latest successful publication hourly

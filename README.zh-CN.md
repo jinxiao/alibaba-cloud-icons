@@ -10,7 +10,7 @@
 两个旧网址继续保留：
 
 - https://jinxiao.github.io/alibaba-cloud-icons/ 默认展示阿里云。
-- https://jinxiao.github.io/drawio-software-icons/ 默认展示软件与品牌。
+- https://jinxiao.github.io/drawio-software-icons/ 默认展示通用软件。
 
 当前仓库负责保留阿里云旧网址与资源路径。工作流每小时检查主仓库最近一次发布成功的版本
 （GitHub 定时任务可能延迟），按提交号构建并发布；也可手动同步，已发布且未变化的版本跳过。
